@@ -54,7 +54,7 @@ router.post('/login', (req, res) => {
 
 router.post('/register', (req, res) => {    
     
-    const { username, firstname, lastname, email, gender, birthdate, password, avatar, role, subscribe_newsletter } = req.body;
+    const { username, firstname, lastname, email, password } = req.body;
 
      // checking username in database
      const a = `SELECT * FROM users WHERE username='${username}'`;
@@ -66,10 +66,7 @@ router.post('/register', (req, res) => {
 
         // checking username already exist or not.
         if(result.length > 0) {
-            res.json({
-                success: false,
-                msg: "Username is already exist"
-            });
+            return res.json({ success: false, msg: "Username is already exist" });
         }
         else {
              // checking email in database
@@ -79,36 +76,26 @@ router.post('/register', (req, res) => {
                 
                 // if any error in query, tell errors 
                 if (err) {
-                    res.json({
-                        success: false,
-                        msg: err.message
-                    });
+                    return res.json({ success: false, msg: err.message });
                 }
 
                 // checking email already exist or not.
                 if(result.length > 0) {
-                    res.json({
-                        success: false,
-                        msg: "email is already exist"
-                    });
+                   return res.json({ success: false, msg: "email is already exist" });
                 }
 
                 else {
 
                     // register user 
-                    const sql = "INSERT INTO users (username, firstname, last_name, email, gender, birthdate, password, avatar, role, subscribe_newsletter) VALUES ?";
+                    const sql = "INSERT INTO users (username, firstname, last_name, email, password) VALUES ?";
                     var values = [
-                        [username, firstname, lastname, email, gender, birthdate, md5(password), avatar, role, subscribe_newsletter]
+                        [username, firstname, lastname, email, birthdate, md5(password)]
                     ];
                     conn.query(sql, [values], (err, result) => {
                         
                         // if any error in query, tell errors 
-                        if (err) {
-                            res.json({
-                                success: false,
-                                msg: err.message
-                            });
-                        }
+                        if (err) return res.json({ success: false, msg: err.message });
+
                         else {                            
 
                             const user = {
