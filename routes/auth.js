@@ -45,7 +45,7 @@ router.post('/login', (req, res) => {
         else {
             res.json({
                 success: false,
-                msg: "Password is not of this email"          
+                msg: "Invalid Login Details"          
             });
         }
 
