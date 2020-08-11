@@ -89,30 +89,27 @@ router.post('/register', (req, res) => {
                     // register user 
                     const sql = "INSERT INTO users (username, firstname, last_name, email, password) VALUES ?";
                     var values = [
-                        [username, firstname, lastname, email, birthdate, md5(password)]
+                        [username, firstname, lastname, email, md5(password)]
                     ];
                     conn.query(sql, [values], (err, result) => {
                         
                         // if any error in query, tell errors 
                         if (err) return res.json({ success: false, msg: err.message });
 
-                        else {                            
-
-                            const user = {
-                                userid: result.insertId,
-                                email: email,
-                                username: username,                                
-                                password: password
-                            }
-                
-                            var token = jwt.sign({user}, process.env.privateKey);
-                
-                            res.json({
-                                success: true,
-                                token,
-                                msg: "registered successfully"
-                            });
+                        const user = {
+                            userid: result.insertId,
+                            email: email,
+                            username: username,                                
+                            password: password
                         }
+            
+                        var token = jwt.sign({user}, process.env.privateKey);
+            
+                        res.json({
+                            success: true,
+                            token,
+                            msg: "registered successfully"
+                        });
                     });
                 }
             });    
