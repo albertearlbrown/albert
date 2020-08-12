@@ -6,7 +6,7 @@ const validUrl = require('valid-url');
 const verifyToken = require('../middlewares/auth');
 
 router.get('/', (req, res) => {
-    const sql = 'SELECT id, communityTitle, storyTitle, redirectLink, username FROM stories INNER JOIN users ON stories.user_id=users.user_id INNER JOIN communities ON stories.community_id = communities.id';
+    const sql = 'SELECT stories.id, communityTitle, storyTitle, redirectLink, username FROM stories INNER JOIN users ON stories.user_id=users.user_id INNER JOIN communities ON stories.community_id = communities.id';
     con.query(sql, (err, result) => {
         if(err) throw err;
         res.send({
